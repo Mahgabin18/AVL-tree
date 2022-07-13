@@ -1,57 +1,74 @@
 # AVL-tree
 
-What if the input to binary search tree comes in a sorted (ascending or descending) manner? It will then look like this −
+AVL Tree implementation in C++ using classes and templates.
+This tree is a special case of augmented BST. AVL tree is a self-balancing tree, ie it prevents skewness while the insertion and deletion operation. Height of each subtree rooted at the current node is stored with the current node.
+For each node:
 
-Unbalanced BST
-It is observed that BST's worst-case performance is closest to linear search algorithms, that is Ο(n). In real-time data, we cannot predict data pattern and their frequencies. So, a need arises to balance out the existing BST.
+height = 1 + max( height( left_child ), height( right_child ) )
 
-Named after their inventor Adelson, Velski & Landis, AVL trees are height balancing binary search tree. AVL tree checks the height of the left and the right sub-trees and assures that the difference is not more than 1. This difference is called the Balance Factor.
-
-Here we see that the first tree is balanced and the next two trees are not balanced −
-
-Unbalanced AVL Trees
-In the second tree, the left subtree of C has height 2 and the right subtree has height 0, so the difference is 2. In the third tree, the right subtree of A has height 2 and the left is missing, so it is 0, and the difference is 2 again. AVL tree permits difference (balance factor) to be only 1.
-
-BalanceFactor = height(left-sutree) − height(right-sutree)
-If the difference in the height of left and right sub-trees is more than 1, the tree is balanced using some rotation techniques.
-
-AVL Rotations
-To balance itself, an AVL tree may perform the following four kinds of rotations −
-
-Left rotation
-Right rotation
-Left-Right rotation
-Right-Left rotation
-The first two rotations are single rotations and the next two rotations are double rotations. To have an unbalanced tree, we at least need a tree of height 2. With this simple tree, let's understand them one by one.
-
-Left Rotation
-If a tree becomes unbalanced, when a node is inserted into the right subtree of the right subtree, then we perform a single left rotation −
-
-Left Rotation
-In our example, node A has become unbalanced as a node is inserted in the right subtree of A's right subtree. We perform the left rotation by making A the left-subtree of B.
-
-AD
-Right Rotation
-AVL tree may become unbalanced, if a node is inserted in the left subtree of the left subtree. The tree then needs a right rotation.
+Basic Operation
+AVL tree always maintains a loose balance ie the heights of the subtrees on both sides of a node can differ by atmost one.
+The balance in the tree heights is achieved by the following two operations:
 
 Right Rotation
-As depicted, the unbalanced node becomes the right child of its left child by performing a right rotation.
+        y                              x
+       / \      Right Rotation        / \
+      x   C     -------------->      A   y
+     / \                                / \
+    A   B                              B   C
+Here, x and y are nodes while A, B and C are AVL trees.
+It can be observed that the right height increases by one while the left length may or may not decrease by one for an AVL tree.
 
-Left-Right Rotation
-Double rotations are slightly complex version of already explained versions of rotations. To understand them better, we should take note of each action performed while rotation. Let's first check how to perform Left-Right rotation. A left-right rotation is a combination of left rotation followed by right rotation.
+Left Rotation
+        x                              y
+       / \       Left Rotation        / \
+      A   y      ------------->      x   C
+         / \                        / \
+        B   C                      A   B
+Here, x and y are nodes while A, B and C are AVL trees.
+It can be observed that the left height increases by one while the right length may or may not decrease by one for an AVL tree.
 
-State	Action
-Right Rotation	A node has been inserted into the right subtree of the left subtree. This makes C an unbalanced node. These scenarios cause AVL tree to perform left-right rotation.
-Left Rotation	We first perform the left rotation on the left subtree of C. This makes A, the left subtree of B.
-Left Rotation	Node C is still unbalanced, however now, it is because of the left-subtree of the left-subtree.
-Right Rotation	We shall now right-rotate the tree, making B the new root node of this subtree. C now becomes the right subtree of its own left subtree.
-Balanced Avl Tree	The tree is now balanced.
-Right-Left Rotation
-The second type of double rotation is Right-Left Rotation. It is a combination of right rotation followed by left rotation.
+Balancing
+Following are the states of nodes and the way to balance the tree. Notice that the height difference at the root node is 2 (loose balance is maintained).
+Here x and y are nodes while h,h+1 denote the height of tree.
 
-State	Action
-Left Subtree of Right Subtree	A node has been inserted into the left subtree of the right subtree. This makes A, an unbalanced node with balance factor 2.
-Subtree Right Rotation	First, we perform the right rotation along C node, making C the right subtree of its own left subtree B. Now, B becomes the right subtree of A.
-Right Unbalanced Tree	Node A is still unbalanced because of the right subtree of its right subtree and requires a left rotation.
-Left Rotation	A left rotation is performed by making B the new root node of the subtree. A becomes the left subtree of its right subtree B.
-Balanced AVL Tree
+Case I
+        y                              x
+       / \      Right Rotation        / \
+      x   h     -------------->     h+1  y
+     / \             on y               / \
+   h+1 h/h+1                         h/h+1 h
+Case II
+        y                              y
+       / \       Left Rotation        / \
+      x   h      ------------->      z   h
+     / \             on x           / \
+    h  h/h+1                      h+1 h/h+1
+Then,
+
+        y                              z
+       / \      Right Rotation        / \
+      z   h     -------------->     h+1  y
+     / \             on y               / \
+   h+1 h/h+1                         h/h+1 h
+Case III
+        x                              y
+       / \       Left Rotation        / \
+      h   y      ------------->      x   h+1
+         / \         on x           / \
+     h/h+1 h+1                     h h/h+1
+Case IV
+        y                              y
+       / \      Right Rotation        / \
+      h   x     -------------->      h   z
+         / \        on x                / \
+      h/h+1 h                       h/h+1 h+1
+Then,
+
+        y                              z
+       / \       Left Rotation        / \
+      h   z      ------------->      y  h+1
+         / \         on y           / \
+      h/h+1 h+1                    h h/h+1
+      
+Credit: Ethan5h from Github
