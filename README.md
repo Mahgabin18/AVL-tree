@@ -71,4 +71,4 @@ Then,
          / \         on y           / \
       h/h+1 h+1                    h h/h+1
       
-Credit: Ethan5h from Github
+ Credit: Ethan5h from Github
